@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rankify — Mini Search Engine dengan TF-IDF, Cosine Similarity, dan Vector Space Model untuk Temu Kembali Informasi">
+    <title>Rankify — Mini Search Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Header / Hero -->
+        <header class="hero" id="hero-section">
+            <div class="logo">
+                <span class="logo-icon">🔍</span>
+                <h1>Rankify</h1>
+            </div>
+            <p class="tagline">Mini Search Engine — Temu Kembali Informasi</p>
+            <p class="subtitle">TF-IDF · Cosine Similarity · Vector Space Model · Inverted Index</p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section" id="search-section">
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input
+                        type="text"
+                        id="search-input"
+                        placeholder="Masukkan query pencarian..."
+                        autocomplete="off"
+                        autofocus
+                    >
+                    <button id="search-btn" type="button">
+                        <span class="btn-text">Cari</span>
+                        <span class="btn-loader" style="display:none;">
+                            <span class="spinner"></span>
+                        </span>
+                    </button>
+                </div>
+                <div class="search-hints">
+                    <span>Contoh:</span>
+                    <button class="hint-chip" data-query="ekonomi hijau">ekonomi hijau</button>
+                    <button class="hint-chip" data-query="green economy">green economy</button>
+                    <button class="hint-chip" data-query="energi terbarukan">energi terbarukan</button>
+                    <button class="hint-chip" data-query="bamboo innovation">bamboo innovation</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Navigation -->
+        <nav class="tabs" id="tabs-nav" style="display:none;">
+            <button class="tab active" data-tab="results">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                Hasil Pencarian
+                <span class="tab-badge" id="result-count">0</span>
+            </button>
+            <button class="tab" data-tab="preprocessing">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <polyline points="4 17 10 11 4 5"></polyline>
+                    <line x1="12" y1="19" x2="20" y2="19"></line>
+                </svg>
+                Pre-processing
+            </button>
+            <button class="tab" data-tab="inverted-index">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Inverted Index
+            </button>
+            <button class="tab" data-tab="stats">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Statistik
+            </button>
+        </nav>
+
+        <!-- Results Panel -->
+        <section class="panel" id="panel-results" style="display:none;">
+            <div class="results-header">
+                <h2 id="results-title">Hasil Pencarian</h2>
+                <p id="results-subtitle"></p>
+            </div>
+            <div id="results-container"></div>
+        </section>
+
+        <!-- Preprocessing Panel -->
+        <section class="panel" id="panel-preprocessing" style="display:none;">
+            <h2>Pipeline Pre-processing</h2>
+            <p class="panel-desc">Langkah-langkah preprocessing yang diterapkan pada query Anda.</p>
+            <div id="preprocessing-container"></div>
+        </section>
+
+        <!-- Inverted Index Panel -->
+        <section class="panel" id="panel-inverted-index" style="display:none;">
+            <h2>Inverted Index</h2>
+            <p class="panel-desc">Pemetaan setiap term ke dokumen yang mengandungnya.</p>
+            <div class="index-search-wrapper">
+                <input type="text" id="index-filter" placeholder="Filter term..." />
+            </div>
+            <div id="inverted-index-container"></div>
+        </section>
+
+        <!-- Stats Panel -->
+        <section class="panel" id="panel-stats" style="display:none;">
+            <h2>Statistik Search Engine</h2>
+            <div id="stats-container"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Rankify © 2025 — Tugas UTS Temu Kembali Informasi</p>
+            <p class="footer-tech">Python · Flask · Sastrawi · TF-IDF · Cosine Similarity · VSM</p>
+        </footer>
+
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
