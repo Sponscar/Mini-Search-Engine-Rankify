@@ -299,3 +299,113 @@ print(f"{'Precision':<15} {precision1:>14.1%} {precision2:>14.1%}")
 print(f"{'Recall':<15} {recall1:>14.1%} {recall2:>14.1%}")
 print(f"{'F-Measure':<15} {f_measure1:>14.1%} {f_measure2:>14.1%}")
 print()
+
+
+print("\n\n" + "=" * 70)
+print("  BAGIAN D: EVALUASI SEMANTIC & HYBRID SEARCH")
+print("=" * 70)
+
+# Initialize semantic and hybrid engines
+print("\n[1] Initializing Semantic Engine...")
+from semantic_engine import SemanticSearchEngine
+from hybrid_engine import HybridSearchEngine
+from evaluation import IREvaluator
+
+semantic_engine = SemanticSearchEngine()
+semantic_engine.load_documents(csv_path)
+
+print("\n[2] Initializing Hybrid Engine...")
+hybrid_engine = HybridSearchEngine(engine, semantic_engine)
+
+print("\n[3] Loading Evaluator...")
+evaluator = IREvaluator('ground_truth.json')
+
+print("\n" + "=" * 70)
+print("  PERBANDINGAN METODE: Traditional vs Semantic vs Hybrid")
+print("=" * 70)
+
+# Evaluate all systems
+print("\n[Evaluating Traditional TF-IDF...]")
+results_traditional = evaluator.evaluate_system(engine, k_values=[5, 10])
+
+print("\n[Evaluating Semantic Search...]")
+results_semantic = evaluator.evaluate_system(semantic_engine, k_values=[5, 10])
+
+print("\n[Evaluating Semantic Reranking...]")
+# Use reranking method instead of RRF for requirement compliance
+class RerankWrapper:
+    def __init__(self, hybrid_eng):
+        self.hybrid_eng = hybrid_eng
+    def search(self, query):
+        return self.hybrid_eng.search_hybrid(query, method='rerank')
+
+rerank_engine = RerankWrapper(hybrid_engine)
+results_hybrid = evaluator.evaluate_system(rerank_engine, k_values=[5, 10])
+
+# Display results
+print("\n" + "=" * 70)
+print("  HASIL EVALUASI - MEAN AVERAGE PRECISION (MAP)")
+print("=" * 70)
+
+mean_row_trad = results_traditional[results_traditional['query_id'] == 'MEAN'].iloc[0]
+mean_row_sem = results_semantic[results_semantic['query_id'] == 'MEAN'].iloc[0]
+mean_row_hyb = results_hybrid[results_hybrid['query_id'] == 'MEAN'].iloc[0]
+
+print(f"\n{'Metrik':<20} {'Traditional':>15} {'Semantic':>15} {'Reranking':>15}")
+print(f"{'-'*20} {'-'*15} {'-'*15} {'-'*15}")
+print(f"{'MAP':<20} {mean_row_trad['ap']:>14.4f} {mean_row_sem['ap']:>14.4f} {mean_row_hyb['ap']:>14.4f}")
+print(f"{'MRR':<20} {mean_row_trad['rr']:>14.4f} {mean_row_sem['rr']:>14.4f} {mean_row_hyb['rr']:>14.4f}")
+print(f"{'P@5':<20} {mean_row_trad['p@5']:>14.4f} {mean_row_sem['p@5']:>14.4f} {mean_row_hyb['p@5']:>14.4f}")
+print(f"{'P@10':<20} {mean_row_trad['p@10']:>14.4f} {mean_row_sem['p@10']:>14.4f} {mean_row_hyb['p@10']:>14.4f}")
+print(f"{'R@5':<20} {mean_row_trad['r@5']:>14.4f} {mean_row_sem['r@5']:>14.4f} {mean_row_hyb['r@5']:>14.4f}")
+print(f"{'R@10':<20} {mean_row_trad['r@10']:>14.4f} {mean_row_sem['r@10']:>14.4f} {mean_row_hyb['r@10']:>14.4f}")
+print(f"{'NDCG@5':<20} {mean_row_trad['ndcg@5']:>14.4f} {mean_row_sem['ndcg@5']:>14.4f} {mean_row_hyb['ndcg@5']:>14.4f}")
+print(f"{'NDCG@10':<20} {mean_row_trad['ndcg@10']:>14.4f} {mean_row_sem['ndcg@10']:>14.4f} {mean_row_hyb['ndcg@10']:>14.4f}")
+
+# Per-query comparison
+print("\n" + "=" * 70)
+print("  PERBANDINGAN PER QUERY (MAP)")
+print("=" * 70)
+
+print(f"\n{'Query ID':<10} {'Query':<35} {'Trad':>10} {'Sem':>10} {'Rerank':>10}")
+print(f"{'-'*10} {'-'*35} {'-'*10} {'-'*10} {'-'*10}")
+
+for idx in range(len(results_traditional) - 1):  # Exclude MEAN row
+    q_trad = results_traditional.iloc[idx]
+    q_sem = results_semantic.iloc[idx]
+    q_hyb = results_hybrid.iloc[idx]
+    
+    query_text_short = q_trad['query_text'][:33] + '..' if len(q_trad['query_text']) > 35 else q_trad['query_text']
+    
+    print(f"{q_trad['query_id']:<10} {query_text_short:<35} {q_trad['ap']:>10.4f} {q_sem['ap']:>10.4f} {q_hyb['ap']:>10.4f}")
+
+# Identify best method
+print("\n" + "=" * 70)
+print("  KESIMPULAN")
+print("=" * 70)
+
+map_scores = {
+    'Traditional': mean_row_trad['ap'],
+    'Semantic': mean_row_sem['ap'],
+    'Semantic Reranking': mean_row_hyb['ap']
+}
+
+best_method = max(map_scores, key=map_scores.get)
+print(f"\nMetode terbaik berdasarkan MAP: {best_method} (MAP = {map_scores[best_method]:.4f})")
+
+improvement_sem = ((mean_row_sem['ap'] - mean_row_trad['ap']) / mean_row_trad['ap'] * 100)
+improvement_hyb = ((mean_row_hyb['ap'] - mean_row_trad['ap']) / mean_row_trad['ap'] * 100)
+
+print(f"\nPeningkatan Semantic vs Traditional: {improvement_sem:+.2f}%")
+print(f"Peningkatan Reranking vs Traditional: {improvement_hyb:+.2f}%")
+
+print("\n" + "=" * 70)
+print("  ANALISIS SELESAI")
+print("=" * 70)
+print("\nSemua metrik telah dihitung:")
+print("  [OK] Traditional TF-IDF (Baseline)")
+print("  [OK] Semantic Search (SBERT Multilingual)")
+print("  [OK] Semantic Reranking (Hybrid Method)")
+print("\nMetrik evaluasi: MAP, MRR, P@k, R@k, NDCG@k")
+print("Ground truth queries: 7 queries dengan relevance judgments")
+print()

@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Rankify — Mini Search Engine dengan TF-IDF, Cosine Similarity, dan Vector Space Model untuk Temu Kembali Informasi">
-    <title>Rankify — Mini Search Engine</title>
+    <meta name="description" content="Rankify — Search Engine & Sentiment Classifier dengan TF-IDF, SBERT, dan Ensemble Classification">
+    <title>Rankify — Search Engine & Sentiment Classifier</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/classification.css">
 </head>
 <body>
     <!-- Animated Background -->
@@ -24,12 +25,40 @@
         <!-- Header / Hero -->
         <header class="hero" id="hero-section">
             <div class="logo">
-                <span class="logo-icon">🔍</span>
                 <h1>Rankify</h1>
             </div>
-            <p class="tagline">Mini Search Engine — Temu Kembali Informasi</p>
-            <p class="subtitle">TF-IDF · Cosine Similarity · Vector Space Model · Inverted Index</p>
+            <p class="tagline">Search Engine & Sentiment Classifier</p>
+            <p class="subtitle">TF-IDF · SBERT · Ensemble Classification · Semantic Search</p>
         </header>
+
+        <!-- Mode Switcher -->
+        <div class="mode-switcher">
+            <button class="mode-btn active" data-mode="search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                Search Engine
+            </button>
+            <button class="mode-btn" data-mode="classify">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                Sentiment Classifier
+            </button>
+            <button class="mode-btn" data-mode="evaluation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Evaluation
+            </button>
+        </div>
 
         <!-- Search Section -->
         <section class="search-section" id="search-section">
@@ -62,6 +91,69 @@
                 </div>
             </div>
         </section>
+
+        <!-- Classification Section -->
+        <section class="classify-section" id="classify-section" style="display:none;">
+            <div class="classify-box">
+                <div class="classify-header">
+                    <h3>Text Input</h3>
+                    <p class="classify-desc">Masukkan teks untuk diklasifikasi sentimennya (Positif/Negatif)</p>
+                </div>
+                <textarea
+                    id="classify-input"
+                    placeholder="Contoh: Green economy creates new jobs and sustainable opportunities for future generations..."
+                    rows="5"
+                ></textarea>
+                
+                <div class="classify-controls">
+                    <div class="method-selector">
+                        <label>Classification Method:</label>
+                        <div class="method-buttons">
+                            <button class="method-btn" data-method="traditional">
+                                <span class="method-icon">📊</span>
+                                <span class="method-name">Traditional</span>
+                                <span class="method-tech">TF-IDF + SVM</span>
+                            </button>
+                            <button class="method-btn active" data-method="hybrid">
+                                <span class="method-icon">🚀</span>
+                                <span class="method-name">Hybrid</span>
+                                <span class="method-tech">SBERT + Reranking + Ensemble</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button id="classify-btn" type="button" class="classify-submit-btn">
+                        <span class="btn-text">Classify Sentiment</span>
+                        <span class="btn-loader" style="display:none;">
+                            <span class="spinner"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Classification Result: Document List -->
+            <div id="classify-result" class="classify-result" style="display:none;">
+                <!-- Relevant Documents List -->
+                <div id="relevant-docs" class="relevant-docs-section" style="display:none;"></div>
+            </div>
+        </section>
+
+        <!-- Evaluation Section -->
+        <section class="eval-section" id="eval-section" style="display:none;">
+            <div class="eval-box">
+                <div class="eval-header">
+                    <h3>📊 Model Evaluation & Comparison</h3>
+                    <p class="eval-desc">Perbandingan performa Search Engine (TF-IDF) vs Classification (SBERT)</p>
+                </div>
+                <button id="run-evaluation-btn" class="classify-submit-btn">
+                    <span class="btn-text">Run Evaluation</span>
+                    <span class="btn-loader" style="display:none;"><span class="spinner"></span></span>
+                </button>
+            </div>
+            <div id="eval-results" style="display:none;"></div>
+        </section>
+
+        <!-- Method selector removed - system automatically uses Semantic Search + Reranking -->
 
         <!-- Tab Navigation -->
         <nav class="tabs" id="tabs-nav" style="display:none;">
@@ -131,11 +223,6 @@
             <div id="stats-container"></div>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>Rankify © 2025 — Tugas UTS Temu Kembali Informasi</p>
-            <p class="footer-tech">Python · Flask · Sastrawi · TF-IDF · Cosine Similarity · VSM</p>
-        </footer>
 
     </div>
 

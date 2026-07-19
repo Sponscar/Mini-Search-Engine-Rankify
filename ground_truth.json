@@ -1,0 +1,92 @@
+{
+  "description": "Ground truth queries and relevance judgments for Rankify evaluation",
+  "dataset": "Green Economy - 50 documents",
+  "created": "2026-07-05",
+  "queries": [
+    {
+      "query_id": "Q1",
+      "query_text": "energi terbarukan solar panel",
+      "description": "Mencari dokumen tentang energi terbarukan, khususnya solar/surya",
+      "relevant_docs": {
+        "highly_relevant": ["D4", "D8", "D10", "D14", "D18", "D25"],
+        "partially_relevant": ["D35", "D50"],
+        "not_relevant": []
+      }
+    },
+    {
+      "query_id": "Q2",
+      "query_text": "green economy pembangunan berkelanjutan",
+      "description": "Mencari dokumen tentang konsep green economy dan sustainable development",
+      "relevant_docs": {
+        "highly_relevant": ["D5", "D11", "D12", "D14", "D15", "D17", "D19", "D20", "D21", "D22", "D24", "D25", "D27", "D28", "D29", "D30"],
+        "partially_relevant": ["D32", "D37", "D38", "D42", "D43", "D45", "D46", "D47", "D49"],
+        "not_relevant": []
+      }
+    },
+    {
+      "query_id": "Q3",
+      "query_text": "inovasi bambu produk ramah lingkungan",
+      "description": "Mencari dokumen tentang inovasi berbasis bambu dan produk eco-friendly",
+      "relevant_docs": {
+        "highly_relevant": ["D2", "D7", "D16", "D23"],
+        "partially_relevant": ["D31", "D36", "D40"],
+        "not_relevant": []
+      }
+    },
+    {
+      "query_id": "Q4",
+      "query_text": "recycling circular economy waste management",
+      "description": "Mencari dokumen tentang daur ulang, ekonomi sirkular, dan pengelolaan sampah",
+      "relevant_docs": {
+        "highly_relevant": ["D3", "D9", "D13", "D26", "D33", "D39", "D44"],
+        "partially_relevant": ["D6", "D34", "D41"],
+        "not_relevant": []
+      }
+    },
+    {
+      "query_id": "Q5",
+      "query_text": "carbon footprint emisi gas rumah kaca",
+      "description": "Mencari dokumen tentang jejak karbon dan emisi GRK",
+      "relevant_docs": {
+        "highly_relevant": ["D1", "D15", "D19", "D28", "D48"],
+        "partially_relevant": ["D11", "D20", "D29", "D37"],
+        "not_relevant": []
+      }
+    },
+    {
+      "query_id": "Q6",
+      "query_text": "green technology innovation smart city",
+      "description": "Mencari dokumen tentang teknologi hijau dan kota pintar",
+      "relevant_docs": {
+        "highly_relevant": ["D12", "D18", "D24", "D30", "D35", "D42"],
+        "partially_relevant": ["D8", "D14", "D25", "D38", "D46"],
+        "not_relevant": []
+      }
+    },
+    {
+      "query_id": "Q7",
+      "query_text": "pertanian organik sustainable agriculture",
+      "description": "Mencari dokumen tentang pertanian organik dan pertanian berkelanjutan",
+      "relevant_docs": {
+        "highly_relevant": ["D17", "D22", "D27", "D32", "D43", "D47"],
+        "partially_relevant": ["D5", "D21", "D28", "D45"],
+        "not_relevant": []
+      }
+    }
+  ],
+  "relevance_levels": {
+    "highly_relevant": {
+      "score": 2,
+      "description": "Dokumen sangat relevan, membahas topik query secara langsung dan detail"
+    },
+    "partially_relevant": {
+      "score": 1,
+      "description": "Dokumen sebagian relevan, menyinggung topik query tapi bukan fokus utama"
+    },
+    "not_relevant": {
+      "score": 0,
+      "description": "Dokumen tidak relevan dengan query"
+    }
+  },
+  "notes": "Ground truth dibuat berdasarkan analisis manual terhadap isi 50 dokumen dataset green economy. Relevance judgment bersifat subjektif dan dapat bervariasi antar penilai."
+}

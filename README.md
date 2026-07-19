@@ -4,12 +4,13 @@
     <strong>Mini Search Engine — Temu Kembali Informasi</strong>
   </p>
   <p align="center">
-    <em>TF-IDF · Cosine Similarity · Vector Space Model · Inverted Index</em>
+    <em>TF-IDF · Semantic Search · Hybrid Fusion · Transformer Models · Advanced IR Metrics</em>
   </p>
   <p align="center">
     <img src="https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white" alt="Python">
     <img src="https://img.shields.io/badge/Flask-3.x-black?logo=flask&logoColor=white" alt="Flask">
     <img src="https://img.shields.io/badge/NLP-Sastrawi-green" alt="Sastrawi">
+    <img src="https://img.shields.io/badge/Transformers-SBERT-orange" alt="Transformers">
     <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License">
   </p>
 </p>
@@ -19,6 +20,8 @@
 ## 📖 Deskripsi
 
 **Rankify** adalah mini search engine berbasis web yang mengimplementasikan konsep-konsep utama dalam **Temu Kembali Informasi (Information Retrieval)**. Aplikasi ini dibangun sebagai tugas UTS mata kuliah Temu Kembali Informasi dan mendemonstrasikan secara interaktif bagaimana sebuah search engine bekerja di balik layar.
+
+**UPDATE:** Sistem telah di-upgrade dengan **Semantic Search** menggunakan transformer models (SBERT) dan **Hybrid Search** dengan multiple fusion strategies untuk meningkatkan relevansi hasil pencarian.
 
 Dataset yang digunakan berisi **50 dokumen** seputar topik **Green Economy** (Ekonomi Hijau), mencakup energi terbarukan, pembangunan berkelanjutan, inovasi ramah lingkungan, dan topik terkait.
 
@@ -30,12 +33,17 @@ Dataset yang digunakan berisi **50 dokumen** seputar topik **Green Economy** (Ek
 |---|---|
 | 🔎 **Pencarian Ranked** | Pencarian dokumen berdasarkan relevansi menggunakan Cosine Similarity |
 | 📊 **TF-IDF Scoring** | Pembobotan term dengan Log Frequency Weighting dan Inverse Document Frequency |
+| 🤖 **Semantic Search** | Pencarian berbasis makna menggunakan transformer models (SBERT multilingual) |
+| 🔀 **Hybrid Search** | 3 fusion strategies: Linear Combination, Reciprocal Rank Fusion (RRF), Semantic Reranking |
+| 📈 **Advanced Metrics** | Evaluasi dengan MAP, MRR, NDCG@k, Precision@k, Recall@k |
 | 📋 **Inverted Index** | Visualisasi pemetaan setiap term ke dokumen yang mengandungnya |
 | ⚙️ **Pipeline Pre-processing** | Demonstrasi langkah-langkah: Case Folding → Punctuation Removal → Tokenization → Stop-word Removal → Stemming |
 | 🇮🇩 **Bahasa Indonesia** | Mendukung stemming bahasa Indonesia menggunakan library **Sastrawi** |
 | 🌐 **Bilingual Stop-words** | Penghapusan stop-words untuk Bahasa Indonesia dan Bahasa Inggris |
-| 📈 **Statistik Engine** | Dashboard statistik: total dokumen, vocabulary size, rata-rata token per dokumen |
+| 📊 **Statistik Engine** | Dashboard statistik: total dokumen, vocabulary size, rata-rata token per dokumen |
+| 🔬 **Method Comparison** | Perbandingan side-by-side Traditional vs Semantic vs Hybrid |
 | 🎨 **UI Modern** | Antarmuka glassmorphism dengan animasi dinamis, dark mode, dan fully responsive |
+
 
 ---
 
@@ -148,10 +156,15 @@ Rankify/
 | Method | Endpoint | Deskripsi |
 |--------|----------|-----------|
 | `GET` | `/` | Halaman utama search engine |
-| `POST` | `/api/search` | Pencarian dokumen. Body: `{"query": "kata kunci"}` |
+| `POST` | `/api/search` | Pencarian dokumen (Traditional TF-IDF). Body: `{"query": "kata kunci"}` |
+| `POST` | `/api/search-semantic` | Pencarian semantic (Transformer). Body: `{"query": "kata kunci"}` |
+| `POST` | `/api/search-hybrid` | Pencarian hybrid. Body: `{"query": "...", "method": "rrf", "alpha": 0.5}` |
+| `POST` | `/api/compare-methods` | Bandingkan semua metode. Body: `{"query": "...", "top_k": 10}` |
 | `GET` | `/api/stats` | Statistik engine (total dokumen, vocabulary size, dll.) |
+| `GET` | `/api/model-info` | Info model transformer yang digunakan |
 | `GET` | `/api/inverted-index` | Seluruh inverted index |
 | `POST` | `/api/preprocessing-demo` | Demo pipeline pre-processing. Body: `{"text": "teks input"}` |
+
 
 ### Contoh Request
 
@@ -195,6 +208,7 @@ Script `analysis.py` menghasilkan analisis lengkap untuk laporan UTS:
 | **A. Analisis Bobot IDF** | Perbandingan IDF untuk kata umum vs kata jarang, tabel IDF beberapa term |
 | **B. Analisis Efek Normalisasi** | Perbandingan ranking Cosine Similarity vs Dot Product (tanpa normalisasi) |
 | **C. Evaluasi Sistem** | Precision, Recall, dan F-Measure untuk 2 skenario query berbeda |
+| **D. Evaluasi Semantic & Hybrid** | Perbandingan Traditional vs Semantic vs Hybrid dengan MAP, MRR, NDCG@k |
 
 Jalankan script analisis:
 ```bash
@@ -211,6 +225,10 @@ python analysis.py
 | **Flask** | Web framework untuk backend & API |
 | **Pandas** | Membaca dan memproses dataset CSV |
 | **PySastrawi** | Stemming & stop-word removal Bahasa Indonesia |
+| **Sentence Transformers** | Pre-trained transformer models untuk semantic search (SBERT) |
+| **PyTorch** | Deep learning framework (dependency untuk transformers) |
+| **Scikit-learn** | Machine learning utilities (cosine similarity, metrics) |
+| **NumPy** | Array operations dan numerical computing |
 | **HTML/CSS/JS** | Frontend dengan desain modern (glassmorphism, dark mode) |
 
 ---

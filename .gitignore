@@ -23,3 +23,6 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+model_cache/
+embeddings_cache.pkl
+__pycache__/

@@ -6,29 +6,29 @@
 /* ---------- CSS Custom Properties ---------- */
 :root {
     /* Colors */
-    --bg-primary: #0a0a0f;
-    --bg-secondary: #12121a;
-    --bg-card: rgba(20, 20, 35, 0.7);
-    --bg-card-hover: rgba(30, 30, 50, 0.8);
-    --bg-glass: rgba(255, 255, 255, 0.03);
-    --bg-glass-border: rgba(255, 255, 255, 0.06);
+    --bg-primary: #f4fdf8;
+    --bg-secondary: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-card-hover: rgba(255, 255, 255, 1);
+    --bg-glass: rgba(255, 255, 255, 0.7);
+    --bg-glass-border: rgba(16, 185, 129, 0.2);
 
-    --text-primary: #e8e8f0;
-    --text-secondary: #8888a0;
-    --text-muted: #55556a;
-    --text-accent: #a78bfa;
+    --text-primary: #064e3b;
+    --text-secondary: #047857;
+    --text-muted: #10b981;
+    --text-accent: #059669;
 
-    --accent-1: #7c3aed;
-    --accent-2: #6366f1;
-    --accent-3: #818cf8;
-    --accent-glow: rgba(124, 58, 237, 0.3);
+    --accent-1: #059669;
+    --accent-2: #10b981;
+    --accent-3: #34d399;
+    --accent-glow: rgba(16, 185, 129, 0.3);
 
-    --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #818cf8 100%);
-    --gradient-card: linear-gradient(145deg, rgba(124, 58, 237, 0.08), rgba(99, 102, 241, 0.04));
-    --gradient-hero: linear-gradient(180deg, rgba(124, 58, 237, 0.15) 0%, transparent 60%);
+    --gradient-primary: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+    --gradient-card: linear-gradient(145deg, rgba(16, 185, 129, 0.08), rgba(52, 211, 153, 0.04));
+    --gradient-hero: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, transparent 60%);
 
-    --border-color: rgba(255, 255, 255, 0.06);
-    --border-accent: rgba(124, 58, 237, 0.3);
+    --border-color: rgba(16, 185, 129, 0.2);
+    --border-accent: rgba(16, 185, 129, 0.4);
 
     --success: #34d399;
     --warning: #fbbf24;
@@ -942,4 +942,146 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(124, 58, 237, 0.5);
+}
+
+/* ---------- Method Selector ---------- */
+.method-selector {
+    margin: 2rem auto;
+    max-width: 900px;
+    padding: 0 1.5rem;
+}
+
+.method-selector-wrapper {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    backdrop-filter: blur(10px);
+}
+
+.method-selector-wrapper label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.method-select {
+    flex: 1;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.method-select:hover {
+    border-color: var(--accent-2);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.method-select:focus {
+    outline: none;
+    border-color: var(--accent-1);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.compare-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.compare-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* ---------- Comparison Grid ---------- */
+.comparison-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.comparison-header h2 {
+    color: var(--text-primary);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.comparison-header p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.comparison-column {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.comparison-column h3 {
+    color: var(--accent-3);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.comparison-results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.result-card.mini {
+    background: var(--bg-secondary);
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    font-size: 0.85rem;
+}
+
+.result-card.mini .result-rank {
+    color: var(--accent-2);
+    font-weight: 600;
+    margin-right: 0.5rem;
+}
+
+.result-card.mini .result-id {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+.result-card.mini .result-score {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.result-card.mini p {
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.3;
 }
